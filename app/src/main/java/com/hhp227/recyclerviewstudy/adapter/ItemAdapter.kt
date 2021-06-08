@@ -13,6 +13,8 @@ import kotlinx.android.synthetic.main.header.view.*
 import kotlinx.android.synthetic.main.item.view.*
 
 class ItemAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(ItemDtoDiffCallback()) {
+    private lateinit var onItemClickListener: (View, Int) -> Unit
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
             TYPE_HEADER ->
@@ -39,6 +41,10 @@ class ItemAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(ItemDtoDiffCallbac
         }
     }
 
+    fun setOnItemClickListener(listener: (View, Int) -> Unit) {
+        onItemClickListener = listener
+    }
+
     inner class HeaderViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(title: String) {
             containerView.tv_title.text = title
@@ -46,6 +52,12 @@ class ItemAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(ItemDtoDiffCallbac
     }
 
     inner class ItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+        init {
+            containerView.setOnClickListener {
+                onItemClickListener(it, adapterPosition)
+            }
+        }
+
         fun bind(data: ItemDto) {
             containerView.name.text = data.name
         }
