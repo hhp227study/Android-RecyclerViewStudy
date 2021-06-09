@@ -3,6 +3,7 @@ package com.hhp227.recyclerviewstudy.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,16 +40,22 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
+        }.also(ItemTouchHelper(ItemTouchCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0))::attachToRecyclerView)
     }
 
     inner class ItemTouchCallback(dragDirs: Int, swipeDirs: Int) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-            TODO("Not yet implemented")
+            Log.e("TEST", "onMove호출")
+            return false
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            TODO("Not yet implemented")
+            Log.e("TEST", "onSwiped호출")
+        }
+
+        override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
+            super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y)
+            Log.e("TEST", "onMoved호출")
         }
     }
 }
