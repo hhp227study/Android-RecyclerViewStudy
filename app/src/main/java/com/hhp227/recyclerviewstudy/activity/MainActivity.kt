@@ -12,6 +12,8 @@ import com.hhp227.recyclerviewstudy.adapter.ItemAdapter
 import com.hhp227.recyclerviewstudy.model.ItemDto
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private val dataList: ArrayList<*> = arrayListOf(
@@ -40,22 +42,25 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        }.also(ItemTouchHelper(ItemTouchCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0))::attachToRecyclerView)
+        }.also(ItemTouchHelper(ItemTouchCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT))::attachToRecyclerView)
     }
 
     inner class ItemTouchCallback(dragDirs: Int, swipeDirs: Int) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-            Log.e("TEST", "onMove호출")
-            return false
+            return viewHolder !is ItemAdapter.HeaderViewHolder
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            Log.e("TEST", "onSwiped호출")
+            viewHolder.adapterPosition.also { position ->
+                dataList.removeAt(position)
+                recycler_view.adapter?.notifyItemRemoved(position)
+            }
         }
 
         override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
             super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y)
-            Log.e("TEST", "onMoved호출")
+            Collections.swap(dataList, fromPos, toPos)
+            recyclerView.adapter?.notifyItemMoved(fromPos, toPos)
         }
     }
 }
