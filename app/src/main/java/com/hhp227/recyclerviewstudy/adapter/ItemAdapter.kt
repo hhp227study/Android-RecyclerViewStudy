@@ -90,7 +90,6 @@ class ItemAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(ItemDtoDiffCallbac
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewHolder.adapterPosition.also { position ->
                     (containerView.recycler_view.adapter as VerticalItemAdapter).mutableList.removeAt(position)
-
                     containerView.recycler_view.adapter?.notifyItemRemoved(position)
                 }
             }
