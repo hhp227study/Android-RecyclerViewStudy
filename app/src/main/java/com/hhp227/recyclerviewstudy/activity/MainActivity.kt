@@ -52,25 +52,6 @@ class MainActivity : AppCompatActivity() {
             adapter = ItemAdapter().apply {
                 submitList(dataList)
             }
-        }//.also(ItemTouchHelper(ItemTouchCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT))::attachToRecyclerView)
-    }
-
-    inner class ItemTouchCallback(dragDirs: Int, swipeDirs: Int) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-            return viewHolder is VerticalItemAdapter.SimpleViewHolder
-        }
-
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            viewHolder.adapterPosition.also { position ->
-                dataList.removeAt(position)
-                recycler_view.adapter?.notifyItemRemoved(position)
-            }
-        }
-
-        override fun onMoved(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, fromPos: Int, target: RecyclerView.ViewHolder, toPos: Int, x: Int, y: Int) {
-            super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y)
-            Collections.swap(dataList, fromPos, toPos)
-            recyclerView.adapter?.notifyItemMoved(fromPos, toPos)
         }
     }
 }
